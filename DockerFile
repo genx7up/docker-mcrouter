@@ -1,3 +1,21 @@
 TODO
 
 ADD gcc.conf /etc/ld.so.conf.d/gcc-4.9.1.conf
+
+mv /usr/bin/gcc  /usr/bin/gcc_old
+
+mv /usr/bin/g++  /usr/bin/g++_old
+
+mv /usr/bin/c++ /usr/bin/c++_old
+
+ln -s -f /usr/local/gcc/bin/gcc  /usr/bin/gcc
+
+ln -s -f /usr/local/gcc/bin/g++  /usr/bin/g++
+
+ln -s -f /usr/local/gcc/bin/c++ /usr/bin/c++
+
+cp /usr/local/gcc/lib64/libstdc++.so.6.0.20 /usr/lib64/.
+
+mv /usr/lib64/libstdc++.so.6 /usr/lib64/libstdc++.so.6.bak
+
+ln -s -f /usr/lib64/libstdc++.so.6.0.20 /usr/lib64/libstdc++.so.6
