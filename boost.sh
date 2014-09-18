@@ -22,6 +22,18 @@ cd ragel && ./autogen.sh
 ./configure --prefix=/usr --disable-manual
 make && make install
 
+#Python27 for Boost
+yum -y install centos-release-SCL
+yum -y install python27
+scl enable python27 "easy_install pip"
+
+#Boost
+scl enable python27 bash
+cd /opt && wget http://downloads.sourceforge.net/boost/boost_1_56_0.tar.bz2
+tar jxf boost_1_56_0.tar.bz2 && cd boost_1_56_0
+./bootstrap.sh --prefix=/usr && ./b2 stage threading=multi link=shared
+./b2 install threading=multi link=shared
+
 #SCONS & double-conversion for Folly
 rpm -Uvh http://sourceforge.net/projects/scons/files/scons/2.3.3/scons-2.3.3-1.noarch.rpm
 cd /opt && git clone https://code.google.com/p/double-conversion/
@@ -35,8 +47,6 @@ ln -sf src double-conversion
 
 #Folly
 cd /opt/folly/folly/
-export LDFLAGS=-L/opt/double-conversion/
-export CPPFLAGS=-I/opt/double-conversion/
 export LD_LIBRARY_PATH="/opt/folly/folly/lib:$LD_LIBRARY_PATH"
 export LD_RUN_PATH="/opt/folly/folly/lib"
 export LDFLAGS="-L/opt/folly/folly/lib -L/opt/double-conversion -ldl"
@@ -44,18 +54,6 @@ export CPPFLAGS="-I/opt/folly/folly/include -I/opt/double-conversion"
 autoreconf -ivf
 ./configure
 make && make install
-
-#Python27 for Boost
-yum -y install centos-release-SCL
-yum -y install python27
-scl enable python27 "easy_install pip"
-
-#Boost
-scl enable python27 bash
-cd /opt && wget http://downloads.sourceforge.net/boost/boost_1_56_0.tar.bz2
-tar jxf boost_1_56_0.tar.bz2 && cd boost_1_56_0
-./bootstrap.sh --prefix=/usr && ./b2 stage threading=multi link=shared
-./b2 install threading=multi link=shared
 
 #McRouter
 cd /opt && git clone https://github.com/facebook/mcrouter.git
