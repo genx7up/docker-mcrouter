@@ -31,13 +31,16 @@ cd double-conversion && scons install
 cd /opt && git clone https://github.com/genx7up/folly.git
 cp folly/folly/SConstruct.double-conversion /opt/double-conversion/
 cd double-conversion && scons -f SConstruct.double-conversion
-mkdir /opt/double-conversion/double-conversion/
-cp -r /opt/double-conversion/src/* /opt/double-conversion/double-conversion/
+ln -sf src double-conversion
 
 #Folly
 cd /opt/folly/folly/
 export LDFLAGS=-L/opt/double-conversion/
 export CPPFLAGS=-I/opt/double-conversion/
+export LD_LIBRARY_PATH="/opt/folly/folly/lib:$LD_LIBRARY_PATH"
+export LD_RUN_PATH="/opt/folly/folly/lib"
+export LDFLAGS="-L/opt/folly/folly/lib -L/opt/double-conversion -ldl"
+export CPPFLAGS="-I/opt/folly/folly/include -I/opt/double-conversion"
 autoreconf -ivf
 ./configure
 make && make install
