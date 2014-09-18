@@ -1,8 +1,14 @@
-yum -y install bzip2-devel libtool gflags-devel libevent-devel libcap-devel openssl-devel
+yum -y install bzip2-devel libtool gflags-devel libevent-devel libcap-devel openssl-devel 
+yum -y bison flex snappy-devel numactl-devel cyrus-sasl-devel
 
 #CMAKE
 cd /opt && wget http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
 tar xvf cmake-2.8.12.2.tar.gz && cd cmake-2.8.12.2
+./configure && make && make install
+
+#AutoConf
+cd /opt && http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+tar xvf autoconf-2.69.tar.gz && cd autoconf-2.69
 ./configure && make && make install
 
 #GLOG
@@ -49,11 +55,27 @@ ln -sf src double-conversion
 cd /opt/folly/folly/
 export LD_LIBRARY_PATH="/opt/folly/folly/lib:$LD_LIBRARY_PATH"
 export LD_RUN_PATH="/opt/folly/folly/lib"
-export LDFLAGS="-L/opt/folly/folly/lib -L/opt/double-conversion -ldl"
+export LDFLAGS="-L/opt/folly/folly/lib -L/opt/double-conversion -L/usr/local/lib -ldl"
 export CPPFLAGS="-I/opt/folly/folly/include -I/opt/double-conversion"
 autoreconf -ivf
 ./configure
 make && make install
+
+#Thrift
+cd /opt && git clone https://github.com/facebook/fbthrift.git
+cd fbthrift/thrift
+ln -sf thrifty.h "/opt/fbthrift/thrift/compiler/thrifty.hh"
+export LD_LIBRARY_PATH="/opt/fbthrift/thrift/lib:$LD_LIBRARY_PATH"
+export LD_RUN_PATH="/opt/fbthrift/thrift/lib"
+export LDFLAGS="-L/opt/fbthrift/thrift/lib -L/usr/local/lib"
+export CPPFLAGS="-I/opt/fbthrift/thrift/include -I/opt/fbthrift/thrift/include/python2.7 -I/opt/folly -I/opt/double-conversion"
+/usr/local/bin/autoreconf -ivf
+./configure --enable-boostthreads
+cd /opt/fbthrift/thrift/compiler && make
+cd /opt/fbthrift/thrift/lib/thrift && make
+cd /opt/fbthrift/thrift/lib/cpp2 && make gen-cpp2/Sasl_types.h
+cd /opt/fbthrift/thrift/lib/cpp2/test && make gen-cpp2/Service_constants.cpp
+cd /opt/fbthrift/thrift && make && make install
 
 #McRouter
 cd /opt && git clone https://github.com/facebook/mcrouter.git
