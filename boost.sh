@@ -1,5 +1,7 @@
+#!/bin/bash
+
 yum -y install unzip bzip2-devel libtool gflags-devel libevent-devel libcap-devel openssl-devel 
-yum -y bison flex snappy-devel numactl-devel cyrus-sasl-devel
+yum -y install bison flex snappy-devel numactl-devel cyrus-sasl-devel
 
 #CMAKE
 cd /opt && wget http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
@@ -90,7 +92,8 @@ cd mcrouter/mcrouter
 export LD_LIBRARY_PATH="/opt/mcrouter/mcrouter/lib:$LD_LIBRARY_PATH"
 export LD_RUN_PATH="/opt/folly/folly/test/.libs:/opt/mcrouter/mcrouter/lib"
 export LDFLAGS="-L/opt/mcrouter/mcrouter/lib -L/usr/local/lib -L/opt/folly/folly/test/.libs"
-export CPPFLAGS="-I/opt/folly/folly/test/gtest-1.6.0/include -I/opt/mcrouter/mcrouter/include -I/opt/folly -I/opt/double-conversion -I/opt/fbthrift -fpermissive"
+export CPPFLAGS="-I/opt/folly/folly/test/gtest-1.6.0/include -I/opt/mcrouter/mcrouter/include -I/opt/folly -I/opt/double-conversion -I/opt/fbthrift -I/opt/boost_1_56_0"
+export CXXFLAGS="-fpermissive"
 autoreconf --install && ./configure
 make && make install
 mcrouter --help
