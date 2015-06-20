@@ -1,13 +1,14 @@
 yum -y install git wget bzip2
 yum -y install gcc
+yum -y install gcc-c++
 
 cd /opt && wget https://gmplib.org/download/gmp/gmp-5.1.3.tar.bz2
 tar jxf gmp-5.1.3.tar.bz2 && cd gmp-5.1.3/
 ./configure --prefix=/usr/local/gmp
 make && make install
 
-cd /opt && wget http://www.mpfr.org/mpfr-current/mpfr-3.1.2.tar.bz2
-tar jxf mpfr-3.1.2.tar.bz2 ;cd mpfr-3.1.2/
+cd /opt && wget http://www.mpfr.org/mpfr-current/mpfr-3.1.3.tar.bz2
+tar jxf mpfr-3.1.3.tar.bz2 ;cd mpfr-3.1.3/
 ./configure --prefix=/usr/local/mpfr -with-gmp=/usr/local/gmp
 make && make install 
 
